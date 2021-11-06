@@ -22,8 +22,7 @@ public class dfsSearch implements Runnable {
                 ret.append(Integer.toString(state[i][j]));
             }
         }
-        String s = ret.toString();
-        return s;
+        return ret.toString();
     }
 
     private static boolean isCorrect(int[][] state) {
@@ -60,7 +59,9 @@ public class dfsSearch implements Runnable {
         }
 
         vis.put(stateGenerator(state), true);
+
         pathStack.push(state);
+
         for (int p = 0; p < 4; p++) {
 
             int ni = i + dx[p];
@@ -107,6 +108,7 @@ public class dfsSearch implements Runnable {
     public void run() {
 
         int[][] arr = { { 2,1, 0 }, { 3, 4, 5 }, { 6, 8, 7 } };
+        
         if (isSolvable(arr)) {
             dfs(arr, 0, 2);
         } else {
