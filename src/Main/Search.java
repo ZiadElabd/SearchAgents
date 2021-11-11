@@ -23,7 +23,26 @@ public class Search {
 //	{
 //		
 //	}
-	ToIntFunction<int[][]> Manhattan =  initial ->{
+	public ToIntFunction<int[][]> Euclidean =  initial ->{
+		int goalX , goalY ;
+		int h=0 ;
+		for(int i=0 ;i<3 ;i++)
+		{
+			for(int j=0 ;j<3 ;j++)
+			{
+				int tile = initial[i][j] ;
+				if(tile == 0)
+					continue ;
+				goalX = tile / 3 ;
+				goalY = tile % 3 ;
+
+				h += (goalX-i) * (goalX-i) + (goalY-j) * (goalY-j);
+			}
+		}
+		return h ;
+	};
+
+	public ToIntFunction<int[][]> Manhattan =  initial ->{
 		int goalX , goalY ;
 		int h=0 ;
 		for(int i=0 ;i<3 ;i++)
@@ -41,24 +60,6 @@ public class Search {
 		}
 		return h ;
 	};
-	/*private int Manhattan(int [][] initial) {
-		int goalX , goalY ;
-		int h=0 ;
-		for(int i=0 ;i<3 ;i++)
-		{
-			for(int j=0 ;j<3 ;j++)
-			{
-				int tile = initial[i][j] ;
-				if(tile == 0)
-					continue ;
-				goalX = tile / 3 ;
-				goalY = tile % 3 ;
-				
-				h += Math.abs(goalX-i) + Math.abs(goalY-j) ;
-			}
-		}
-		return h ;
-	}*/
 	
 	private boolean valid(int i ,int j)
 	{
@@ -133,7 +134,7 @@ public class Search {
 		
 		Search s = new Search() ;
 		if(s.isSolvable(initial))
-			s.solve(initial, s.Manhattan) ;
+			s.solve(initial, s.Euclidean) ;
 		else 
 			System.out.println("This initial state can not be solved");
 
