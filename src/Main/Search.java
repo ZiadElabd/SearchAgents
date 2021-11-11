@@ -1,5 +1,6 @@
 package Main;
 import java.util.PriorityQueue;
+import java.util.function.ToIntFunction;
 
 public class Search {
 
@@ -22,7 +23,7 @@ public class Search {
 //	{
 //		
 //	}
-	private int Manhattan(int [][] initial) {
+	public ToIntFunction<int[][]> Euclidean =  initial ->{
 		int goalX , goalY ;
 		int h=0 ;
 		for(int i=0 ;i<3 ;i++)
@@ -34,19 +35,38 @@ public class Search {
 					continue ;
 				goalX = tile / 3 ;
 				goalY = tile % 3 ;
-				
+
+				h += (goalX-i) * (goalX-i) + (goalY-j) * (goalY-j);
+			}
+		}
+		return h ;
+	};
+
+	public ToIntFunction<int[][]> Manhattan =  initial ->{
+		int goalX , goalY ;
+		int h=0 ;
+		for(int i=0 ;i<3 ;i++)
+		{
+			for(int j=0 ;j<3 ;j++)
+			{
+				int tile = initial[i][j] ;
+				if(tile == 0)
+					continue ;
+				goalX = tile / 3 ;
+				goalY = tile % 3 ;
+
 				h += Math.abs(goalX-i) + Math.abs(goalY-j) ;
 			}
 		}
 		return h ;
-	}
+	};
 	
 	private boolean valid(int i ,int j)
 	{
 		return (i>=0 && i<3 && j>=0 && j<3) ;
 	}
 	
-	private void solve (int[][] initial) {
+	private void solve (int[][] initial, ToIntFunction<int[][]> heuristic_function) {
 		
 		int[] dx = { 1, 0, -1, 0 };
 		int[] dy = { 0, -1, 0, 1 };
@@ -63,7 +83,7 @@ public class Search {
 		
 		
 		PriorityQueue<Node> pq = new PriorityQueue<Node>((a, b) -> (a.g + a.h) - (b.g + b.h));
-		int h = this.Manhattan(initial) ;
+		int h = heuristic_function.applyAsInt(initial) ;
 		Node node = new Node(0,h,initial,x,y,null);
 		pq.add(node) ;
 		
@@ -96,7 +116,7 @@ public class Search {
 					matrix[parent.x][parent.y] = matrix[row][col] ;
 					matrix[row][col] = 0 ;
 					
-					h = this.Manhattan(matrix) ;
+					h = heuristic_function.applyAsInt(matrix) ;
 					Node newNode = new Node(parent.g + 1,h,matrix,row,col,parent);
 					pq.add(newNode) ;
 				}
@@ -114,7 +134,7 @@ public class Search {
 		
 		Search s = new Search() ;
 		if(s.isSolvable(initial))
-			s.solve(initial) ;
+			s.solve(initial, s.Euclidean) ;
 		else 
 			System.out.println("This initial state can not be solved");
 
