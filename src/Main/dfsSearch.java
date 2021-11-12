@@ -5,17 +5,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class dfsSearch {
+public class dfsSearch implements Runnable {
 
     static HashMap<String, Boolean> vis = new HashMap<>();
 
-    static Stack<int[][]> pathStack = new Stack<>();
     static Stack<String> plainPath = new Stack<>();
     static Integer Depth = 0;
     static Integer NodesExpanded = 0;
 
-    static int dx[] = { 1, 0, -1, 0 };
-    static int dy[] = { 0, 1, 0, -1 };
+    static int dx[] = { -1, 0, 1, 0 };
+    static int dy[] = { 0, -1, 0, 1 };
 
     private static String stateGenerator(int[][] state) {
 
@@ -56,22 +55,21 @@ public class dfsSearch {
 
         vis.put(stateGenerator(state), true);
         NodesExpanded++;
-        pathStack.push(state);
 
         if (dir == 1)
-            plainPath.push("DOWN");
-        else if (dir == 2)
-            plainPath.push("RIGHT");
-        else if (dir == 3)
             plainPath.push("UP");
-        else if (dir == 4)
+        else if (dir == 2)
             plainPath.push("LEFT");
+        else if (dir == 3)
+            plainPath.push("DOWN");
+        else if (dir == 4)
+            plainPath.push("RIGHT");
         else
             plainPath.push("INITIAL STATE!");
 
+        Depth = Math.max(Depth, depth);
+
         if (isCorrect(state)) {
-            pathStack.push(state);
-            Depth = depth;
             return true;
         }
 
@@ -97,53 +95,50 @@ public class dfsSearch {
                 return true;
         }
 
-        pathStack.pop();
         plainPath.pop();
         return false;
     }
 
-    // public static void main(String[] args) {
-    // new Thread(null, new dfsSearch(), "", 1 << 30).start();
-    // }
+    public static void main(String[] args) {
+        new Thread(null, new dfsSearch(), "", 1 << 30).start();
+    }
 
-    // public void run() {
+    public void run() {
 
-    // int[][] arr = { { 1, 0, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
+        int[][] arr = { { 1, 2, 5 }, { 3, 0, 4 }, { 6, 7, 8 } };
 
-    // long st = System.currentTimeMillis();
-    // if (!dfs(arr, 0, 1, -1, 0)) {
-    // System.out.println("There is no solution for this puzzle !!");
-    // return;
-    // } else {
-    // ArrayList<String> path = new ArrayList<>();
-    // while (!plainPath.isEmpty()) {
-    // path.add(plainPath.pop());
-    // }
-    // Collections.reverse(path);
-    // System.out.println("*********** THE PATH ***********");
-    // for (int ii = 0; ii < path.size(); ii++) {
-    // System.out.println(path.get(ii));
-    // System.out.println("***********");
-    // }
+        long st = System.currentTimeMillis();
+        if (!dfs(arr, 1, 1, -1, 0)) {
+            System.out.println("There is no solution for this puzzle !!");
+            return;
+        } else {
+            ArrayList<String> path = new ArrayList<>();
+            while (!plainPath.isEmpty()) {
+                path.add(plainPath.pop());
+            }
+            Collections.reverse(path);
+            System.out.println("*********** THE PATH ***********");
+            for (int ii = 0; ii < path.size(); ii++) {
+                System.out.println(path.get(ii));
+                System.out.println("***********");
+            }
 
-    // System.out.println("################################################");
-    // System.out.println("Total steps to get to the goal = " + (path.size() - 1) +
-    // " step");
-    // System.out.println("################################################");
+            System.out.println("################################################");
+            System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
+            System.out.println("################################################");
 
-    // }
-    // System.out.println("Time taken : " + (System.currentTimeMillis() - st) + "
-    // ms");
-    // System.out.println("################################################");
-    // System.out.println("Nodes Expanded : " + NodesExpanded);
-    // System.out.println("################################################");
-    // System.out.println("Search depth : " + Depth);
-    // System.out.println("################################################");
+        }
+        System.out.println("Time taken : " + (System.currentTimeMillis() - st) + "ms");
+        System.out.println("################################################");
+        System.out.println("Nodes Expanded : " + NodesExpanded);
+        System.out.println("################################################");
+        System.out.println("Search depth : " + Depth);
+        System.out.println("################################################");
 
-    // }
+    }
 
     public void Search(int[][] initial) {
-        
+
         int i = -1, j = -1;
         for (int a = 0; a < 3; a++) {
             for (int b = 0; b < 3; b++) {
