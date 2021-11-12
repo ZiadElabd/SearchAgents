@@ -170,7 +170,6 @@ public class DFS_Search implements Runnable{
             System.out.println("There is no solution for this puzzle !!");
         }else {
             List<String> pathNodes = new ArrayList<>();
-            pathNodes.addAll(path);
             while (!path.isEmpty()) {
                 pathNodes.add(path.pop());
             }
