@@ -2,7 +2,7 @@ package Main;
 
 import java.util.*;
 
-public class BfsSearch {
+public class BFS_Search {
 
     private static int toArr(int[] arr,String state){
         int blockPostion=0;
@@ -41,8 +41,8 @@ public class BfsSearch {
                 }
                 return "Succes to reach goal";
             }
-            List<List<String>> neigbour=getchildState(state);
-            for (List<String> s:neigbour) {
+            List<List<String>> neighbour=getchildState(state);
+            for (List<String> s:neighbour) {
                 if ((!explored.contains(s.get(0)))) {
                     frontier.add(s.get(0));
                     explored.add(s.get(0));

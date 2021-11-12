@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class DfsSearch implements Runnable{
+public class DFS_Search implements Runnable{
     int[][] gridState;
 
 
@@ -18,7 +18,7 @@ public class DfsSearch implements Runnable{
     static int dx[] = { -1, 0, 1, 0 };
     static int dy[] = { 0, -1, 0, 1 };
 
-    public DfsSearch(int[][] gridState) {
+    public DFS_Search(int[][] gridState) {
         this.gridState = gridState;
     }
 
@@ -27,7 +27,7 @@ public class DfsSearch implements Runnable{
         StringBuilder ret = new StringBuilder("");
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                ret.append(Integer.toString(state[i][j]));
+                ret.append(state[i][j]);
             }
         }
         return ret.toString();
