@@ -1,5 +1,8 @@
 package Main;
-public class Node {
+
+import java.util.Arrays;
+
+public class Node implements Comparable<Node> {
 	
 	//cost and heuristic
 	public int g , h  ;
@@ -18,5 +21,15 @@ public class Node {
 		this.y = y ;
 		this.Parent = p ;
 		this.state = state ;
+	}
+
+	@Override
+	public int compareTo(Node o) {
+		if (Arrays.equals(this.state, o.state))
+			return 0;
+		else if ((this.g + this.h) > (o.g + o.h))
+			return 1;
+		else
+			return -1;
 	}
 }
