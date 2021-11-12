@@ -54,7 +54,7 @@ public class BFS_Search {
             }
 
         }
-        return "Failed";
+        return "There is no solution for this puzzle !!";
     }
     private static List<List<String>> getchildState(String State){
         List<List<String>> result=new ArrayList<>();
