@@ -98,6 +98,7 @@ public class Search {
 		
 		 HashMap<int[][], Integer> mp_g = new HashMap<int[][], Integer>();
 		 HashMap<int[][], Integer> mp_h = new HashMap<int[][], Integer>();
+		 HashMap<int[][], Integer> visited = new HashMap<int[][], Integer>();
 		 
 		PriorityQueue<Node> pq = new PriorityQueue<Node>((a, b) -> ( mp_g.get(a.state) + mp_h.get(a.state) ) - (mp_g.get(b.state) + mp_h.get(b.state)));
 		int h = heuristic_function.applyAsInt(initial) ;
@@ -108,7 +109,7 @@ public class Search {
 		while(! pq.isEmpty())
 		{
 			Node parent = pq.poll() ;
-			
+			visited.put(parent.state, 1) ;
 			if(parent.h == 0)
 			{
 				System.out.println("Done");
@@ -133,26 +134,29 @@ public class Search {
 					matrix[row][col] = 0 ;
 					
 					h = heuristic_function.applyAsInt(matrix) ;
-					if(mp_g.containsKey(matrix))
+					if(!visited.containsKey(matrix))
 					{
-						int newCost = h + parent.g ;
-						int oldCost =mp_g.get(matrix) + mp_h.get(matrix) ;
-						if(oldCost >= newCost)
-							continue ;
+						if(mp_g.containsKey(matrix))
+						{
+							int newCost = h + parent.g ;
+							int oldCost =mp_g.get(matrix) + mp_h.get(matrix) ;
+							if(oldCost <= newCost)
+								continue ;
+							else 
+							{
+								mp_g.put(matrix,parent.g + 1);
+								pq.remove(new Node(parent.g + 1,h,matrix,row,col,null));
+								pq.add(new Node(parent.g + 1,h,matrix,row,col,parent));
+							}
+							
+						}
 						else 
 						{
 							mp_g.put(matrix,parent.g + 1);
-							pq.remove(new Node(parent.g + 1,h,matrix,row,col,null));
-							pq.add(new Node(parent.g + 1,h,matrix,row,col,parent));
+							mp_h.put(matrix, h);
+							Node newNode = new Node(parent.g + 1,h,matrix,row,col,parent);
+							pq.add(newNode) ;
 						}
-						
-					}
-					else 
-					{
-						mp_g.put(matrix,parent.g + 1);
-						mp_h.put(matrix, h);
-						Node newNode = new Node(parent.g + 1,h,matrix,row,col,parent);
-						pq.add(newNode) ;
 					}
 				}
 			}
