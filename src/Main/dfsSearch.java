@@ -2,14 +2,17 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Stack;
-import java.util.TreeMap;
 
-public class dfsSearch implements Runnable {
+public class dfsSearch {
 
-    static TreeMap<String, Boolean> vis = new TreeMap<>();
+    static HashMap<String, Boolean> vis = new HashMap<>();
 
     static Stack<int[][]> pathStack = new Stack<>();
+    static Stack<String> plainPath = new Stack<>();
+    static Integer Depth = 0;
+    static Integer NodesExpanded = 0;
 
     static int dx[] = { 1, 0, -1, 0 };
     static int dy[] = { 0, 1, 0, -1 };
@@ -43,24 +46,34 @@ public class dfsSearch implements Runnable {
         return;
     }
 
-    private static boolean dfs(int[][] state, int i, int j) {
+    private static boolean dfs(int[][] state, int i, int j, int dir, int depth) {
+
+        if (i < 0 || j < 0 || i >= 3 || j >= 3)
+            return false;
+
+        if (vis.containsKey(stateGenerator(state)))
+            return false;
+
+        vis.put(stateGenerator(state), true);
+        NodesExpanded++;
+        pathStack.push(state);
+
+        if (dir == 1)
+            plainPath.push("DOWN");
+        else if (dir == 2)
+            plainPath.push("RIGHT");
+        else if (dir == 3)
+            plainPath.push("UP");
+        else if (dir == 4)
+            plainPath.push("LEFT");
+        else
+            plainPath.push("INITIAL STATE!");
 
         if (isCorrect(state)) {
             pathStack.push(state);
+            Depth = depth;
             return true;
         }
-
-        if (i < 0 || j < 0 || i >= 3 || j >= 3) {
-            return false;
-        }
-
-        if (vis.containsKey(stateGenerator(state))) {
-            return false;
-        }
-
-        vis.put(stateGenerator(state), true);
-
-        pathStack.push(state);
 
         for (int p = 0; p < 4; p++) {
 
@@ -79,64 +92,100 @@ public class dfsSearch implements Runnable {
             }
 
             swap(newState, i, j, ni, nj);
-            if (dfs(newState, ni, nj))
+
+            if (dfs(newState, ni, nj, p + 1, depth + 1))
                 return true;
         }
+
         pathStack.pop();
+        plainPath.pop();
         return false;
     }
 
-    private static boolean isSolvable(int[][] initial) {
-        Integer[] arr = new Integer[9];
-        int k = 0;
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                arr[k++] = initial[i][j];
+    // public static void main(String[] args) {
+    // new Thread(null, new dfsSearch(), "", 1 << 30).start();
+    // }
 
-        int cnt = 0;
-        for (int i = 0; i < 9; i++)
-            for (int j = i + 1; j < 9; j++)
-                if (arr[i] != 0 && arr[j] != 0 && arr[i] > arr[j])
-                    cnt++;
-        return cnt % 2 == 0;
-    }
+    // public void run() {
 
-    public static void main(String[] args) {
-        new Thread(null, new dfsSearch(), "", 1 << 30).start();
-    }
+    // int[][] arr = { { 1, 0, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
 
-    public void run() {
+    // long st = System.currentTimeMillis();
+    // if (!dfs(arr, 0, 1, -1, 0)) {
+    // System.out.println("There is no solution for this puzzle !!");
+    // return;
+    // } else {
+    // ArrayList<String> path = new ArrayList<>();
+    // while (!plainPath.isEmpty()) {
+    // path.add(plainPath.pop());
+    // }
+    // Collections.reverse(path);
+    // System.out.println("*********** THE PATH ***********");
+    // for (int ii = 0; ii < path.size(); ii++) {
+    // System.out.println(path.get(ii));
+    // System.out.println("***********");
+    // }
 
-        int[][] arr = { { 2,1, 0 }, { 3, 4, 5 }, { 6, 8, 7 } };
+    // System.out.println("################################################");
+    // System.out.println("Total steps to get to the goal = " + (path.size() - 1) +
+    // " step");
+    // System.out.println("################################################");
+
+    // }
+    // System.out.println("Time taken : " + (System.currentTimeMillis() - st) + "
+    // ms");
+    // System.out.println("################################################");
+    // System.out.println("Nodes Expanded : " + NodesExpanded);
+    // System.out.println("################################################");
+    // System.out.println("Search depth : " + Depth);
+    // System.out.println("################################################");
+
+    // }
+
+    public void Search(int[][] initial) {
         
-        if (isSolvable(arr)) {
-            dfs(arr, 0, 2);
-        } else {
-            System.out.println("There is no solution for this puzzle !!");
+        int i = -1, j = -1;
+        for (int a = 0; a < 3; a++) {
+            for (int b = 0; b < 3; b++) {
+                if (initial[a][b] == 0) {
+                    i = a;
+                    j = b;
+                    break;
+                }
+            }
+        }
+        if (i == -1) {
+            System.out.println("Invalid puzzle!");
             return;
         }
-
-        ArrayList<int[][]> path = new ArrayList<>();
-        while (!pathStack.isEmpty()) {
-            path.add(pathStack.pop());
-        }
-        Collections.reverse(path);
-        for (int i = 0; i < path.size(); i++) {
-            int a[][] = path.get(i);
-            for (int k = 0; k < a.length; k++) {
-                System.out.print("* ");
-                for (int m = 0; m < a[0].length; m++) {
-                    System.out.print(a[k][m] + " ");
-                }
-                System.out.println("*");
+        long st = System.currentTimeMillis();
+        if (!dfs(initial, i, j, -1, 0)) {
+            System.out.println("There is no solution for this puzzle !!");
+            return;
+        } else {
+            ArrayList<String> path = new ArrayList<>();
+            while (!plainPath.isEmpty()) {
+                path.add(plainPath.pop());
             }
-            System.out.println("*********");
+            Collections.reverse(path);
+            System.out.println("*********** THE PATH ***********");
+            for (int ii = 0; ii < path.size(); ii++) {
+                System.out.println("***********");
+                System.out.println("*" + path.get(ii) + "*");
+                System.out.println("***********");
+            }
+
+            System.out.println("################################################");
+            System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
+            System.out.println("################################################");
+
         }
-        System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
-    }
-
-    public Integer Search(int[][] initial) {
-
-        return 0;
+        System.out.println("Time taken : " + (System.currentTimeMillis() - st) + " ms");
+        System.out.println("################################################");
+        System.out.println("Nodes Expanded : " + NodesExpanded);
+        System.out.println("################################################");
+        System.out.println("Search depth : " + Depth);
+        System.out.println("################################################");
+        return;
     }
 }
