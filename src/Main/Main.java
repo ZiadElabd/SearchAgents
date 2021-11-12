@@ -22,9 +22,9 @@ public class Main {
         System.out.println("3- A*");
         int choice = scan.nextInt();
         if (choice == 1){
-            new Thread(null, new DfsSearch(state), "", 1 << 30).start();
+            new Thread(null, new DFS_Search(state), "", 1 << 30).start();
         }else if (choice == 2){
-            BfsSearch b = new BfsSearch();
+            BFS_Search b = new BFS_Search();
             int[] array = Stream.of(state).flatMapToInt(IntStream::of).toArray();
             String consoleOutput = b.search(array);
             System.out.println(consoleOutput);

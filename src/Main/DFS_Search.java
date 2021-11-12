@@ -1,9 +1,6 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 public class DFS_Search implements Runnable{
     int[][] gridState;
@@ -109,30 +106,14 @@ public class DFS_Search implements Runnable{
          long st = System.currentTimeMillis();
          long end;
          if (!dfs(gridState, 1, 1, -1, 0)) {
-             System.out.println("There is no solution for this puzzle !!");
+             plainPath = null;
              return;
          } else {
              end = System.currentTimeMillis();
-             ArrayList<String> path = new ArrayList<>();
-             while (!plainPath.isEmpty()) {
-                 path.add(plainPath.pop());
-             }
-             Collections.reverse(path);
-             System.out.println("*********** THE PATH ***********");
-             for (int ii = 0; ii < path.size(); ii++) {
-                 System.out.println(path.get(ii));
-                 System.out.println("***********");
-             }
-             System.out.println("################################################");
-             System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
-             System.out.println("################################################");
+
          }
-         System.out.println("Time taken : " + (end - st) + " ms");
-         System.out.println("################################################");
-         System.out.println("Nodes Expanded : " + NodesExpanded);
-         System.out.println("################################################");
-         System.out.println("Search depth : " + Depth);
-         System.out.println("################################################");
+         finish(plainPath, st, NodesExpanded,Depth );
+
      }
 
     public void Search(int[][] initial) {
@@ -182,5 +163,33 @@ public class DFS_Search implements Runnable{
         System.out.println("Search depth : " + Depth);
         System.out.println("################################################");
         return;
+    }
+
+    private final void finish(Stack<String> path, long startTime, int nodesExpanded, int Depth){
+        if (path == null){
+            System.out.println("There is no solution for this puzzle !!");
+        }else {
+            List<String> pathNodes = new ArrayList<>();
+            pathNodes.addAll(path);
+            while (!path.isEmpty()) {
+                pathNodes.add(path.pop());
+            }
+            Collections.reverse(path);
+            System.out.println("*********** THE PATH ***********");
+            for (int ii = 0; ii < path.size(); ii++) {
+                System.out.println(path.get(ii));
+                System.out.println("***********");
+            }
+            System.out.println("################################################");
+            System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
+            System.out.println("################################################");
+        }
+
+        System.out.println("Time taken : " + (System.currentTimeMillis() - startTime) + " ms");
+        System.out.println("################################################");
+        System.out.println("Nodes Expanded : " + nodesExpanded);
+        System.out.println("################################################");
+        System.out.println("Search depth : " + Depth);
+        System.out.println("################################################");
     }
 }
