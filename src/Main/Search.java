@@ -82,7 +82,7 @@ public class Search {
 		
 		if(!this.isSolvable(initial))
 		{
-			System.out.println("Un Solvable") ;
+			System.out.println("There is no solution for this puzzle !!") ;
 			return ;
 		}
 		
