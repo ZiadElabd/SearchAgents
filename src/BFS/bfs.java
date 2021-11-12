@@ -5,17 +5,8 @@ import java.util.*;
 public class bfs {
     public static void main(String[] args) {
 
-      int[] intial=new int[]{ 4,3,2,6,5,0,7,8,1};
-        for (String s:search(intial)) {
-         System.out.println(s);
-        };
-    }
-    private static String toString(int[] state){
-        String result=state[0]+"";
-        for (int i=1;i<9;i++) {
-            result+=","+state[i];
-        }
-        return result;
+        int[] intial=new int[]{4 ,3 ,2, 6, 5 ,0 ,7,8,1};
+        System.out.println(search(intial));
     }
     private static int toArr(int[] arr,String state){
         int blockPostion=0;
@@ -27,47 +18,56 @@ public class bfs {
         }
         return blockPostion;
     }
-    public static LinkedList<String> search(int[] intialState){
+    public static String search(int[] intialState){
+        Long start=System.currentTimeMillis();
         String goal=Arrays.toString(new int[]{0,1,2,3,4,5,6,7,8});
         String state=Arrays.toString(intialState);
         Queue<LinkedList<String>> paths=new LinkedList<>();
         Queue<String> frontier=new LinkedList();
-        TreeSet<String> explored=new TreeSet<>();
+        HashSet<String> explored=new HashSet<>();
         frontier.add(state);
-          paths.add(new LinkedList<>());
-          paths.peek().add(state);
+        paths.add(new LinkedList<>());
+        paths.peek().add("Base-->"+state);
         int count=0;
         while (!frontier.isEmpty()){
-            System.out.println(count++);
+            count++;
             LinkedList<String> path=paths.poll();
             state=frontier.poll();
             explored.add(state);
             if(state.equals(goal)){
-                System.out.println(count);
-                return path;
+                System.out.println("Nodes expanded :"+count);
+                System.out.println("cost of path :"+path.size());
+                System.out.println("Search depth :"+path.size());
+                System.out.println("Running time :"+(System.currentTimeMillis()-start)+"ms");
+                System.out.println("Path to reach goal");
+                for (String s:path) {
+                    System.out.println(s);
+                }
+                return "Succes to reach goal";
             }
-            List<String> neigbour=getchildState(state);
-            for (String s:neigbour) {
-                if ((!frontier.contains(s))||(!explored.contains(s))) {
-                    frontier.add(s);
-                   LinkedList new_path= new LinkedList();
+            List<List<String>> neigbour=getchildState(state);
+            for (List<String> s:neigbour) {
+                if ((!explored.contains(s.get(0)))) {
+                    frontier.add(s.get(0));
+                    explored.add(s.get(0));
+                    LinkedList new_path= new LinkedList();
                     new_path.addAll(path);
-                    new_path.add(s);
+                    new_path.add(s.get(1)+"-->"+s.get(0));
                     paths.add(new_path);
                 }
             }
 
         }
-
-        return null;
+        return "Failed";
     }
-    private static List<String> getchildState(String State){
-        List<String> result=new ArrayList<>();
+    private static List<List<String>> getchildState(String State){
+        List<List<String>> result=new ArrayList<>();
         int[] arr=new int[9];
         int postion=toArr(arr,State);
         int x=postion/3;int y=postion%3;
         int[] xMoves=new int[]{-1,0,1,0};
         int[] yMoves=new int[]{0,1,0,-1};
+        String[] moves=new String[]{"UP","RIGHT","DOWN","LEFT"};
         for (int i = 0; i < 4; i++) {
             int[] tempArr=Arrays.copyOf(arr,9);
             int xd=x+xMoves[i];
@@ -77,7 +77,7 @@ public class bfs {
             int temp=arr[postion];
             tempArr[postion]=tempArr[newPostion];
             tempArr[newPostion]=temp;
-            result.add(Arrays.toString(tempArr));
+            result.add(Arrays.asList(Arrays.toString(tempArr),moves[i]));
         }
         return result;
     }
