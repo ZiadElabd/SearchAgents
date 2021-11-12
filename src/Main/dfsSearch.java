@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class dfsSearch implements Runnable {
+public class dfsSearch {
 
     static HashMap<String, Boolean> vis = new HashMap<>();
 
@@ -99,43 +99,45 @@ public class dfsSearch implements Runnable {
         return false;
     }
 
-    public static void main(String[] args) {
-        new Thread(null, new dfsSearch(), "", 1 << 30).start();
-    }
+    // public static void main(String[] args) {
+    //     new Thread(null, new dfsSearch(), "", 1 << 30).start();
+    // }
 
-    public void run() {
+    // public void run() {
 
-        int[][] arr = { { 1, 2, 5 }, { 3, 0, 4 }, { 6, 7, 8 } };
+    //     int[][] arr = { { 2,1,4 }, { 6,0,5 }, { 3,8,7 } };
 
-        long st = System.currentTimeMillis();
-        if (!dfs(arr, 1, 1, -1, 0)) {
-            System.out.println("There is no solution for this puzzle !!");
-            return;
-        } else {
-            ArrayList<String> path = new ArrayList<>();
-            while (!plainPath.isEmpty()) {
-                path.add(plainPath.pop());
-            }
-            Collections.reverse(path);
-            System.out.println("*********** THE PATH ***********");
-            for (int ii = 0; ii < path.size(); ii++) {
-                System.out.println(path.get(ii));
-                System.out.println("***********");
-            }
+    //     long st = System.currentTimeMillis();
+    //     long end;
+    //     if (!dfs(arr, 1, 1, -1, 0)) {
+    //         System.out.println("There is no solution for this puzzle !!");
+    //         return;
+    //     } else {
+    //         end = System.currentTimeMillis();
+    //         ArrayList<String> path = new ArrayList<>();
+    //         while (!plainPath.isEmpty()) {
+    //             path.add(plainPath.pop());
+    //         }
+    //         Collections.reverse(path);
+    //         System.out.println("*********** THE PATH ***********");
+    //         for (int ii = 0; ii < path.size(); ii++) {
+    //             System.out.println(path.get(ii));
+    //             System.out.println("***********");
+    //         }
 
-            System.out.println("################################################");
-            System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
-            System.out.println("################################################");
+    //         System.out.println("################################################");
+    //         System.out.println("Total steps to get to the goal = " + (path.size() - 1) + " step");
+    //         System.out.println("################################################");
 
-        }
-        System.out.println("Time taken : " + (System.currentTimeMillis() - st) + "ms");
-        System.out.println("################################################");
-        System.out.println("Nodes Expanded : " + NodesExpanded);
-        System.out.println("################################################");
-        System.out.println("Search depth : " + Depth);
-        System.out.println("################################################");
+    //     }
+    //     System.out.println("Time taken : " + (end - st) + " ms");
+    //     System.out.println("################################################");
+    //     System.out.println("Nodes Expanded : " + NodesExpanded);
+    //     System.out.println("################################################");
+    //     System.out.println("Search depth : " + Depth);
+    //     System.out.println("################################################");
 
-    }
+    // }
 
     public void Search(int[][] initial) {
 
@@ -154,10 +156,12 @@ public class dfsSearch implements Runnable {
             return;
         }
         long st = System.currentTimeMillis();
+        long end = 0;
         if (!dfs(initial, i, j, -1, 0)) {
             System.out.println("There is no solution for this puzzle !!");
             return;
         } else {
+            end = System.currentTimeMillis();
             ArrayList<String> path = new ArrayList<>();
             while (!plainPath.isEmpty()) {
                 path.add(plainPath.pop());
@@ -175,7 +179,7 @@ public class dfsSearch implements Runnable {
             System.out.println("################################################");
 
         }
-        System.out.println("Time taken : " + (System.currentTimeMillis() - st) + " ms");
+        System.out.println("Time taken : " + (end - st) + " ms");
         System.out.println("################################################");
         System.out.println("Nodes Expanded : " + NodesExpanded);
         System.out.println("################################################");
