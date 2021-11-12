@@ -169,7 +169,7 @@ public class Search {
 	
 	
 	public static void main(String[] args) {
-		int[][] initial = { {4, 3, 2}, {6, 5, 0}, {7, 8, 1} };
+		int[][] initial = { {1, 2, 5}, {3, 4, 0}, {6, 7, 8} };
 		
 		Search s = new Search() ;
 		
