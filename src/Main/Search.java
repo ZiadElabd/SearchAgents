@@ -104,10 +104,16 @@ public class Search {
 		int h = heuristic_function.applyAsInt(initial) ;
 		Node node = new Node(0,h,initial,x,y,null);
 		pq.add(node) ;
+		//pq.add(new Node(0,h,initial,x,y,null));
+		/*System.out.println(pq.size());
+		pq.remove(new Node(0,h,initial,x,y,null));
+		System.out.println("pq.size()");
+		System.out.println(pq.size());*/
 		mp_g.put(initial, 0);
 		mp_h.put(initial, h);
 		while(! pq.isEmpty())
 		{
+			//System.out.println(pq.size());
 			Node parent = pq.poll() ;
 			visited.put(parent.state, 1) ;
 			if(parent.h == 0)
@@ -134,29 +140,31 @@ public class Search {
 					matrix[row][col] = 0 ;
 					
 					h = heuristic_function.applyAsInt(matrix) ;
-					if(!visited.containsKey(matrix))
+					if(visited.containsKey(matrix))
 					{
-						if(mp_g.containsKey(matrix))
-						{
-							int newCost = h + parent.g ;
-							int oldCost =mp_g.get(matrix) + mp_h.get(matrix) ;
-							if(oldCost <= newCost)
-								continue ;
-							else 
-							{
-								mp_g.put(matrix,parent.g + 1);
-								pq.remove(new Node(parent.g + 1,h,matrix,row,col,null));
-								pq.add(new Node(parent.g + 1,h,matrix,row,col,parent));
-							}
-							
-						}
-						else 
+						System.out.println("vfdvfd");
+						continue;
+					}
+					if(mp_g.containsKey(matrix))
+					{
+						int newCost = h + parent.g ;
+						int oldCost =mp_g.get(matrix) + mp_h.get(matrix) ;
+						if(oldCost <= newCost)
+							continue ;
+						else
 						{
 							mp_g.put(matrix,parent.g + 1);
-							mp_h.put(matrix, h);
-							Node newNode = new Node(parent.g + 1,h,matrix,row,col,parent);
-							pq.add(newNode) ;
+							pq.remove(new Node(parent.g + 1,h,matrix,row,col,null));
+							pq.add(new Node(parent.g + 1,h,matrix,row,col,parent));
 						}
+
+					}
+					else
+					{
+						mp_g.put(matrix,parent.g + 1);
+						mp_h.put(matrix, h);
+						Node newNode = new Node(parent.g + 1,h,matrix,row,col,parent);
+						pq.add(newNode) ;
 					}
 				}
 			}
@@ -169,7 +177,7 @@ public class Search {
 	
 	
 	public static void main(String[] args) {
-		int[][] initial = { {1, 2, 5}, {3, 4, 0}, {6, 7, 8} };
+		int[][] initial = { {4, 3, 2}, {6, 5, 0}, {7, 8, 1} };
 		
 		Search s = new Search() ;
 		

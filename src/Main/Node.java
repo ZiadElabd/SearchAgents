@@ -2,7 +2,7 @@ package Main;
 
 import java.util.Arrays;
 
-public class Node implements Comparable<Node> {
+public class Node  {
 	
 	//cost and heuristic
 	public int g , h  ;
@@ -24,12 +24,11 @@ public class Node implements Comparable<Node> {
 	}
 
 	@Override
-	public int compareTo(Node o) {
-		if (Arrays.equals(this.state, o.state))
-			return 0;
-		else if ((this.g + this.h) > (o.g + o.h))
-			return 1;
-		else
-			return -1;
+	public boolean equals(Object o){
+		if(o instanceof Node){
+			Node node = (Node) o;
+			return Arrays.equals(this.state,node.state);
+		}
+		return false;
 	}
 }
