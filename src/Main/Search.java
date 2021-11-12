@@ -37,7 +37,7 @@ public class Search {
 				goalX = tile / 3 ;
 				goalY = tile % 3 ;
 
-				h += (goalX-i) * (goalX-i) + (goalY-j) * (goalY-j);
+				h += Math.sqrt((goalX-i) * (goalX-i) + (goalY-j) * (goalY-j));
 			}
 		}
 		return h ;
