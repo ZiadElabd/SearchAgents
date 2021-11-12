@@ -25,7 +25,17 @@ public class Main {
         }else if (choice == 2){
 
         }else if (choice == 3){
-
+        	System.out.println("1- Manhattan");
+            System.out.println("2- Euclidean");
+            int choise = scan.nextInt() ;
+            Search sh = new Search() ;
+            if(choise == 1){
+            	sh.solve(state, sh.Manhattan);
+            }else if(choise == 2)
+            {
+            	sh.solve(state, sh.Euclidean);
+            }
+            
         }
         
     }

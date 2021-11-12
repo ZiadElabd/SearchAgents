@@ -79,8 +79,9 @@ public class Search {
 			}
 		}
 		System.out.println();
+		
 	}
-	private void solve (int[][] initial, ToIntFunction<int[][]> heuristic_function) {
+	public void solve (int[][] initial, ToIntFunction<int[][]> heuristic_function) {
 		
 		if(!this.isSolvable(initial))
 		{
@@ -88,6 +89,7 @@ public class Search {
 			return ;
 		}
 		
+		long st = System.currentTimeMillis() ;
 		int[] dx = { 1, 0, -1, 0 };
 		int[] dy = { 0, -1, 0, 1 };
 		//to get coordinates of 0 tile 
@@ -102,7 +104,7 @@ public class Search {
 				}
 		
 	
-		 
+		 int Depth = 0 ,NodesExpanded = 0 ;
 		PriorityQueue<Node> pq = new PriorityQueue<Node>((a, b) -> (a.g + a.h) - (b.g + b.h));
 		int h = heuristic_function.applyAsInt(initial) ;
 		Node node = new Node(0,h,initial,x,y,null);
@@ -111,9 +113,22 @@ public class Search {
 		{
 			//System.out.println(pq.size());
 			Node parent = pq.poll() ;
+			NodesExpanded++ ;
+			Depth = Math.max(parent.g, Depth) ;
 			if(parent.h == 0)
 			{
+				System.out.println("The Path ");
 				printPath(parent) ;
+				System.out.println("################################################");
+	            System.out.println("Total steps to get to the goal = " + parent.g + " step");
+	            System.out.println("################################################");
+	            System.out.println("Time taken : " + (System.currentTimeMillis() - st) + "ms");
+	            System.out.println("################################################");
+	            System.out.println("Nodes Expanded : " + NodesExpanded);
+	            System.out.println("################################################");
+	            System.out.println("Search depth : " + Depth);
+	            System.out.println("################################################");
+	            
 				return ;
 			}
 			for(int i=0 ;i<4 ;i++)
@@ -149,8 +164,8 @@ public class Search {
 	
 	
 	public static void main(String[] args) {
-		int[][] initial = { {2, 1, 4}, {6, 0, 5}, {3, 8, 7} };
-		
+		int[][] initial = { {2, 1, 4}, {6, 0,5}, {3, 8, 7} };
+		 
 		Search s = new Search() ;
 		
 			s.solve(initial, s.Manhattan) ;
