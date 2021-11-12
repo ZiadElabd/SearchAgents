@@ -2,12 +2,8 @@ package Main;
 
 import java.util.*;
 
-public class bfs {
-    public static void main(String[] args) {
+public class BfsSearch {
 
-        int[] intial=new int[]{1,0,2,7,5,4,8,6,3};
-        System.out.println(search(intial));
-    }
     private static int toArr(int[] arr,String state){
         int blockPostion=0;
         int j=0;

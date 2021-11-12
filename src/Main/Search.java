@@ -1,9 +1,11 @@
 package Main;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.function.ToIntFunction;
 
 public class Search {
+
+	int[] dx = { 1, 0, -1, 0 };
+	int[] dy = { 0, -1, 0, 1 };
 
 	private boolean isSolvable(int[][] initial)
 	{
@@ -20,10 +22,6 @@ public class Search {
 					cnt++ ;
 		return cnt%2==0 ;
 	}
-//	private int Euclidean(int [][] initial)
-//	{
-//		
-//	}
 	public ToIntFunction<int[][]> Euclidean =  initial ->{
 		int goalX , goalY ;
 		int h=0 ;
@@ -79,7 +77,6 @@ public class Search {
 			}
 		}
 		System.out.println();
-		
 	}
 	public void solve (int[][] initial, ToIntFunction<int[][]> heuristic_function) {
 		
@@ -89,9 +86,7 @@ public class Search {
 			return ;
 		}
 		
-		long st = System.currentTimeMillis() ;
-		int[] dx = { 1, 0, -1, 0 };
-		int[] dy = { 0, -1, 0, 1 };
+		long startTime = System.currentTimeMillis() ;
 		//to get coordinates of 0 tile 
 		int x=0,y=0 ;
 		for(int i=0 ;i<3 ;i++)
@@ -102,33 +97,19 @@ public class Search {
 					y=j ;
 					break ;
 				}
-		
-	
 		 int Depth = 0 ,NodesExpanded = 0 ;
-		PriorityQueue<Node> pq = new PriorityQueue<Node>((a, b) -> (a.g + a.h) - (b.g + b.h));
+		PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> (a.g + a.h) - (b.g + b.h));
 		int h = heuristic_function.applyAsInt(initial) ;
 		Node node = new Node(0,h,initial,x,y,null);
 		pq.add(node) ;
 		while(! pq.isEmpty())
 		{
-			//System.out.println(pq.size());
 			Node parent = pq.poll() ;
 			NodesExpanded++ ;
 			Depth = Math.max(parent.g, Depth) ;
 			if(parent.h == 0)
 			{
-				System.out.println("The Path ");
-				printPath(parent) ;
-				System.out.println("################################################");
-	            System.out.println("Total steps to get to the goal = " + parent.g + " step");
-	            System.out.println("################################################");
-	            System.out.println("Time taken : " + (System.currentTimeMillis() - st) + "ms");
-	            System.out.println("################################################");
-	            System.out.println("Nodes Expanded : " + NodesExpanded);
-	            System.out.println("################################################");
-	            System.out.println("Search depth : " + Depth);
-	            System.out.println("################################################");
-	            
+				finish(parent, startTime, NodesExpanded, Depth);
 				return ;
 			}
 			for(int i=0 ;i<4 ;i++)
@@ -143,7 +124,7 @@ public class Search {
 					for(int k=0 ;k<3 ;k++)
 						for(int t=0 ;t<3 ;t++)
 							matrix[k][t] = parent.state[k][t] ;
-					
+
 					//swap
 					matrix[parent.x][parent.y] = matrix[row][col] ;
 					matrix[row][col] = 0 ;
@@ -152,24 +133,23 @@ public class Search {
 							
 					Node newNode = new Node(parent.g + 1,h,matrix,row,col,parent);
 					pq.add(newNode) ;
-					
 				}
 			}
 		}
-		
-		
-		
 	}
-	
-	
-	
-	public static void main(String[] args) {
-		int[][] initial = { {2, 1, 4}, {6, 0,5}, {3, 8, 7} };
-		 
-		Search s = new Search() ;
-		
-			s.solve(initial, s.Manhattan) ;
 
+	private final void finish(Node parent, long startTime, int nodesExpanded, int Depth){
+		System.out.println("The Path ");
+		printPath(parent) ;
+		System.out.println("################################################");
+		System.out.println("Total steps to get to the goal = " + parent.g + " step");
+		System.out.println("################################################");
+		System.out.println("Time taken : " + (System.currentTimeMillis() - startTime) + "ms");
+		System.out.println("################################################");
+		System.out.println("Nodes Expanded : " + nodesExpanded);
+		System.out.println("################################################");
+		System.out.println("Search depth : " + Depth);
+		System.out.println("################################################");
 	}
 
 }
