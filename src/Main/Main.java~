@@ -38,9 +38,6 @@ public class Main {
             }else if(choice == 2)
             {
             	sh.solve(state, sh.Euclidean);
-            }else{
-                System.out.println("error");
-                return;
             }
             
         }
