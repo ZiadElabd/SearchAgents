@@ -10,7 +10,7 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         System.out.println("   8-Puzzle   ");
         System.out.println("enter the state: ");
-        int state[][] = new int[3][3] ; // scan it ya ziad ya sharmoot
+        int state[][] = new int[3][3] ;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 state[i][j] = scan.nextInt();
