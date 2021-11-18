@@ -32,7 +32,7 @@ public class BFS_Search {
             explored.add(state);
             if(state.equals(goal)){
                 System.out.println("Nodes expanded :"+count);
-                System.out.println("cost of path :"+path.size());
+                System.out.println("cost of path :"+(path.size()-1));
                 System.out.println("Search depth :"+path.size());
                 System.out.println("Running time :"+(System.currentTimeMillis()-start)+"ms");
                 System.out.println("Path to reach goal");
